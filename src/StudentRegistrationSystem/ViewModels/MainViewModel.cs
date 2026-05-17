@@ -6,6 +6,8 @@ using System.Windows.Data;
 using System.Windows.Input;
 using StudentRegistrationSystem.Common;
 using StudentRegistrationSystem.Models;
+using StudentRegistrationSystem.Modules.FilterReset.Commands;
+using StudentRegistrationSystem.Modules.FilterReset.Services;
 using StudentRegistrationSystem.Services;
 using StudentRegistrationSystem.Views;
 
@@ -14,6 +16,7 @@ namespace StudentRegistrationSystem.ViewModels;
 public sealed class MainViewModel : ViewModelBase
 {
     private readonly DataService _dataService;
+    private readonly FilterResetService _filterResetService;
     private Database _db = new();
 
     public ObservableCollection<Student> Students { get; } = new();
@@ -144,6 +147,7 @@ public sealed class MainViewModel : ViewModelBase
             "StudentRegistrationSystem");
 
         _dataService = new DataService(Path.Combine(dataFolder, "database.xml"));
+        _filterResetService = new FilterResetService();
 
         StudentsView = CollectionViewSource.GetDefaultView(Students);
         StudentsView.Filter = StudentFilter;
@@ -167,25 +171,31 @@ public sealed class MainViewModel : ViewModelBase
 
         SaveCommand = new RelayCommand(async () => await SaveAsync());
         ReloadCommand = new RelayCommand(async () => await LoadAsync());
-        ClearStudentFiltersCommand = new RelayCommand(ClearStudentFilters);
-        ClearCourseFiltersCommand = new RelayCommand(ClearCourseFilters);
+        // Command Pattern: concrete command objects encapsulate reset requests from the View.
+        ClearStudentFiltersCommand = new ResetStudentFiltersCommand(ClearStudentFilters);
+        ClearCourseFiltersCommand = new ResetCourseFiltersCommand(ClearCourseFilters);
 
         _ = LoadAsync();
     }
 
     private void ClearStudentFilters()
     {
-        StudentNameFilter = "";
-        GroupFilter = "";
-        StudyYearFilter = null;
-        OnlyScholarship = false;
+        var resetState = _filterResetService.ResetStudents();
+
+        StudentNameFilter = resetState.StudentNameFilter;
+        GroupFilter = resetState.GroupFilter;
+        StudyYearFilter = resetState.StudyYearFilter;
+        OnlyScholarship = resetState.OnlyScholarship;
+
         StudentsView.Refresh();
         UpdateStats();
     }
 
     private void ClearCourseFilters()
     {
-        CourseDepartmentFilter = "";
+        var resetState = _filterResetService.ResetCourses();
+
+        CourseDepartmentFilter = resetState.CourseDepartmentFilter;
         CoursesView.Refresh();
     }
 
