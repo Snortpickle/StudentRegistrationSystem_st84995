@@ -36,24 +36,36 @@
         </Border>
 
         <Border DockPanel.Dock="Top" Margin="16,16,16,8" Style="{StaticResource PanelBorderStyle}">
-            <WrapPanel VerticalAlignment="Center">
+            <WrapPanel VerticalAlignment="Center" ItemHeight="34" ItemWidth="Auto">
                 <TextBlock Text="Student filters"
                            FontWeight="SemiBold"
                            VerticalAlignment="Center"
                            Margin="0,0,14,0"/>
+                <TextBlock Text="Name" VerticalAlignment="Center" Margin="0,0,6,0"/>
                 <TextBox Width="220"
                          ToolTip="First/last name contains..."
+                         AutomationProperties.Name="Student name filter"
+                         Margin="0,4,8,4"
                          Text="{Binding StudentNameFilter, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBlock Text="Group" VerticalAlignment="Center" Margin="0,0,6,0"/>
                 <TextBox Width="120"
                          ToolTip="Group (e.g. IT-31)"
+                         AutomationProperties.Name="Student group filter"
+                         Margin="0,4,8,4"
                          Text="{Binding GroupFilter, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBlock Text="Year" VerticalAlignment="Center" Margin="0,0,6,0"/>
                 <TextBox Width="104"
                          ToolTip="Study year (1..6)"
+                         AutomationProperties.Name="Student study year filter"
+                         Margin="0,4,8,4"
                          Text="{Binding StudyYearFilter, UpdateSourceTrigger=PropertyChanged}"/>
                 <CheckBox Content="Scholarship only"
                           IsChecked="{Binding OnlyScholarship}"
                           Margin="14,4,4,4"/>
                 <Button Content="Show all students"
+                        ToolTip="Reset all student filters and display every student"
+                        AutomationProperties.Name="Show all students"
+                        <!-- Command Pattern binding: invokes Task 4 student filter reset command -->
                         Command="{Binding ClearStudentFiltersCommand}"
                         Style="{StaticResource SecondaryButtonStyle}"
                         Margin="14,4,4,4"/>
@@ -98,9 +110,16 @@
                             <Button Content="Add" Command="{Binding AddCourseCommand}"/>
                             <Button Content="Edit" Command="{Binding EditCourseCommand}" Style="{StaticResource SecondaryButtonStyle}"/>
                             <Button Content="Delete" Command="{Binding DeleteCourseCommand}" Style="{StaticResource DangerButtonStyle}"/>
-                            <TextBlock Text="Department filter:" VerticalAlignment="Center" Margin="18,0,6,0"/>
-                            <TextBox Width="120" Text="{Binding CourseDepartmentFilter, UpdateSourceTrigger=PropertyChanged}" />
+                            <TextBlock Text="Department" VerticalAlignment="Center" Margin="18,0,6,0"/>
+                            <TextBox Width="140"
+                                     ToolTip="Filter courses by department"
+                                     AutomationProperties.Name="Course department filter"
+                                     Margin="0,4,8,4"
+                                     Text="{Binding CourseDepartmentFilter, UpdateSourceTrigger=PropertyChanged}" />
                             <Button Content="Show all courses"
+                                    ToolTip="Reset course filters and display every course"
+                                    AutomationProperties.Name="Show all courses"
+                                    <!-- Command Pattern binding: invokes Task 4 course filter reset command -->
                                     Command="{Binding ClearCourseFiltersCommand}"
                                     Style="{StaticResource SecondaryButtonStyle}"/>
                         </StackPanel>
