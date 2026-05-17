@@ -81,7 +81,14 @@ public sealed class MainViewModel : ViewModelBase
     public string? GroupFilter
     {
         get => _groupFilter;
-        set { if (SetProperty(ref _groupFilter, value)) StudentsView.Refresh(); }
+        set
+        {
+            if (SetProperty(ref _groupFilter, value))
+            {
+                StudentsView.Refresh();
+                UpdateStats();
+            }
+        }
     }
 
     private int? _studyYearFilter;
@@ -127,6 +134,8 @@ public sealed class MainViewModel : ViewModelBase
 
     public ICommand SaveCommand { get; }
     public ICommand ReloadCommand { get; }
+    public ICommand ClearStudentFiltersCommand { get; }
+    public ICommand ClearCourseFiltersCommand { get; }
 
     public MainViewModel()
     {
@@ -158,8 +167,26 @@ public sealed class MainViewModel : ViewModelBase
 
         SaveCommand = new RelayCommand(async () => await SaveAsync());
         ReloadCommand = new RelayCommand(async () => await LoadAsync());
+        ClearStudentFiltersCommand = new RelayCommand(ClearStudentFilters);
+        ClearCourseFiltersCommand = new RelayCommand(ClearCourseFilters);
 
         _ = LoadAsync();
+    }
+
+    private void ClearStudentFilters()
+    {
+        StudentNameFilter = "";
+        GroupFilter = "";
+        StudyYearFilter = null;
+        OnlyScholarship = false;
+        StudentsView.Refresh();
+        UpdateStats();
+    }
+
+    private void ClearCourseFilters()
+    {
+        CourseDepartmentFilter = "";
+        CoursesView.Refresh();
     }
 
     private bool StudentFilter(object obj)
@@ -175,7 +202,7 @@ public sealed class MainViewModel : ViewModelBase
 
         if (!string.IsNullOrWhiteSpace(GroupFilter))
         {
-            if (!string.Equals(s.Group, GroupFilter.Trim(), StringComparison.OrdinalIgnoreCase))
+            if (!IsGroupMatch(s.Group, GroupFilter))
                 return false;
         }
 
@@ -408,7 +435,9 @@ public sealed class MainViewModel : ViewModelBase
             ? GroupFilter.Trim()
             : SelectedStudent?.Group;
 
-		int? groupCount = group == null ? null : StatisticsService.CountStudentsInGroup(_dbWithRuntime(), group);
+		int? groupCount = group == null
+            ? null
+            : Students.Count(s => IsGroupMatch(s.Group, group));
 
         // Calculation 2: average grade in selected course
 		double? avg = SelectedCourse == null ? null : StatisticsService.AverageGradeForCourse(_dbWithRuntime(), SelectedCourse.Id);
@@ -441,6 +470,20 @@ public sealed class MainViewModel : ViewModelBase
             Courses = Courses.ToList(),
             Enrollments = Enrollments.ToList()
         };
+
+    private static bool IsGroupMatch(string? group, string? searchText)
+    {
+        var normalizedGroup = NormalizeGroupSearchText(group);
+        var normalizedSearch = NormalizeGroupSearchText(searchText);
+
+        return normalizedSearch.Length == 0 || normalizedGroup.Contains(normalizedSearch);
+    }
+
+    private static string NormalizeGroupSearchText(string? value)
+        => new((value ?? "")
+            .Where(c => !char.IsWhiteSpace(c) && c != '-')
+            .Select(char.ToUpperInvariant)
+            .ToArray());
 
     private static Student Clone(Student s) => new()
     {

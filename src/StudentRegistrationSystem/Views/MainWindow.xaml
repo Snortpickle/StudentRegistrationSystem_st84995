@@ -3,43 +3,83 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="clr-namespace:StudentRegistrationSystem.ViewModels"
         xmlns:models="clr-namespace:StudentRegistrationSystem.Models"
-        Title="Student Registration System" Height="700" Width="1050"
+        Title="Student Registration System" Height="760" Width="1180"
+        MinHeight="680" MinWidth="1040"
         WindowStartupLocation="CenterScreen">
     <Window.DataContext>
         <vm:MainViewModel/>
     </Window.DataContext>
 
-    <DockPanel>
-        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="8">
-            <Button Content="Save XML" Command="{Binding SaveCommand}"/>
-            <Button Content="Reload" Command="{Binding ReloadCommand}"/>
-            <TextBlock Text="Student filters:" VerticalAlignment="Center" Margin="18,0,6,0"/>
-            <TextBox Width="180" ToolTip="First/last name contains..." Text="{Binding StudentNameFilter, UpdateSourceTrigger=PropertyChanged}"/>
-            <TextBox Width="90" ToolTip="Group (e.g. IT-31)" Text="{Binding GroupFilter, UpdateSourceTrigger=PropertyChanged}"/>
-            <TextBox Width="60" ToolTip="Study year (1..6)" Text="{Binding StudyYearFilter, UpdateSourceTrigger=PropertyChanged}"/>
-            <CheckBox Content="Scholarship only" IsChecked="{Binding OnlyScholarship}"/>
-        </StackPanel>
+    <DockPanel LastChildFill="True">
+        <Border DockPanel.Dock="Top" Background="#162033" Padding="22,18">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
 
-        <Grid Margin="8">
+                <StackPanel>
+                    <TextBlock Text="Student Registration System"
+                               Foreground="White"
+                               FontSize="24"
+                               FontWeight="SemiBold"/>
+                    <TextBlock Text="Manage students, courses, enrollments, and XML persistence"
+                               Foreground="#B9C6D8"
+                               Margin="0,4,0,0"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                    <Button Content="Save XML" Command="{Binding SaveCommand}"/>
+                    <Button Content="Reload" Command="{Binding ReloadCommand}" Style="{StaticResource SecondaryButtonStyle}"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <Border DockPanel.Dock="Top" Margin="16,16,16,8" Style="{StaticResource PanelBorderStyle}">
+            <WrapPanel VerticalAlignment="Center">
+                <TextBlock Text="Student filters"
+                           FontWeight="SemiBold"
+                           VerticalAlignment="Center"
+                           Margin="0,0,14,0"/>
+                <TextBox Width="220"
+                         ToolTip="First/last name contains..."
+                         Text="{Binding StudentNameFilter, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBox Width="120"
+                         ToolTip="Group (e.g. IT-31)"
+                         Text="{Binding GroupFilter, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBox Width="104"
+                         ToolTip="Study year (1..6)"
+                         Text="{Binding StudyYearFilter, UpdateSourceTrigger=PropertyChanged}"/>
+                <CheckBox Content="Scholarship only"
+                          IsChecked="{Binding OnlyScholarship}"
+                          Margin="14,4,4,4"/>
+                <Button Content="Show all students"
+                        Command="{Binding ClearStudentFiltersCommand}"
+                        Style="{StaticResource SecondaryButtonStyle}"
+                        Margin="14,4,4,4"/>
+            </WrapPanel>
+        </Border>
+
+        <Grid Margin="16,8,16,16">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="3*"/>
                 <ColumnDefinition Width="2*"/>
             </Grid.ColumnDefinitions>
 
-            <TabControl Grid.Column="0">
+            <Border Grid.Column="0" Style="{StaticResource PanelBorderStyle}">
+                <TabControl>
                 <TabItem Header="Students">
                     <DockPanel>
                         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
                             <Button Content="Add" Command="{Binding AddStudentCommand}"/>
-                            <Button Content="Edit" Command="{Binding EditStudentCommand}"/>
-                            <Button Content="Delete" Command="{Binding DeleteStudentCommand}"/>
+                            <Button Content="Edit" Command="{Binding EditStudentCommand}" Style="{StaticResource SecondaryButtonStyle}"/>
+                            <Button Content="Delete" Command="{Binding DeleteStudentCommand}" Style="{StaticResource DangerButtonStyle}"/>
                         </StackPanel>
 
                         <DataGrid ItemsSource="{Binding StudentsView}"
                                   SelectedItem="{Binding SelectedStudent}"
                                   AutoGenerateColumns="False"
-                                  IsReadOnly="True"
-                                  Margin="0,6,0,0">
+                                  IsReadOnly="True">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="Last name" Binding="{Binding LastName}" Width="*"/>
                                 <DataGridTextColumn Header="First name" Binding="{Binding FirstName}" Width="*"/>
@@ -56,17 +96,19 @@
                     <DockPanel>
                         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" VerticalAlignment="Center">
                             <Button Content="Add" Command="{Binding AddCourseCommand}"/>
-                            <Button Content="Edit" Command="{Binding EditCourseCommand}"/>
-                            <Button Content="Delete" Command="{Binding DeleteCourseCommand}"/>
+                            <Button Content="Edit" Command="{Binding EditCourseCommand}" Style="{StaticResource SecondaryButtonStyle}"/>
+                            <Button Content="Delete" Command="{Binding DeleteCourseCommand}" Style="{StaticResource DangerButtonStyle}"/>
                             <TextBlock Text="Department filter:" VerticalAlignment="Center" Margin="18,0,6,0"/>
                             <TextBox Width="120" Text="{Binding CourseDepartmentFilter, UpdateSourceTrigger=PropertyChanged}" />
+                            <Button Content="Show all courses"
+                                    Command="{Binding ClearCourseFiltersCommand}"
+                                    Style="{StaticResource SecondaryButtonStyle}"/>
                         </StackPanel>
 
                         <DataGrid ItemsSource="{Binding CoursesView}"
                                   SelectedItem="{Binding SelectedCourse}"
                                   AutoGenerateColumns="False"
-                                  IsReadOnly="True"
-                                  Margin="0,6,0,0">
+                                  IsReadOnly="True">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="Title" Binding="{Binding Title}" Width="2*"/>
                                 <DataGridTextColumn Header="Department" Binding="{Binding Department}" Width="*"/>
@@ -81,15 +123,14 @@
                     <DockPanel>
                         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
                             <Button Content="Add" Command="{Binding AddEnrollmentCommand}"/>
-                            <Button Content="Edit" Command="{Binding EditEnrollmentCommand}"/>
-                            <Button Content="Delete" Command="{Binding DeleteEnrollmentCommand}"/>
+                            <Button Content="Edit" Command="{Binding EditEnrollmentCommand}" Style="{StaticResource SecondaryButtonStyle}"/>
+                            <Button Content="Delete" Command="{Binding DeleteEnrollmentCommand}" Style="{StaticResource DangerButtonStyle}"/>
                         </StackPanel>
 
                         <DataGrid ItemsSource="{Binding EnrollmentsView}"
                                   SelectedItem="{Binding SelectedEnrollment}"
                                   AutoGenerateColumns="False"
-                                  IsReadOnly="True"
-                                  Margin="0,6,0,0">
+                                  IsReadOnly="True">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="StudentId" Binding="{Binding StudentId}" Width="2*"/>
                                 <DataGridTextColumn Header="CourseId" Binding="{Binding CourseId}" Width="2*"/>
@@ -100,16 +141,33 @@
                         </DataGrid>
 
                         <TextBlock Margin="6" TextWrapping="Wrap"
+                                   Foreground="{StaticResource MutedTextBrush}"
                                    Text="*For simplicity, only StudentId and CourseId are shown. In a real project you could display names via a converter or a dedicated ViewModel."/>
                     </DockPanel>
                 </TabItem>
-            </TabControl>
+                </TabControl>
+            </Border>
 
-            <GroupBox Grid.Column="1" Header="Calculations / statistics" Margin="10,0,0,0">
-                <ScrollViewer VerticalScrollBarVisibility="Auto">
-                    <TextBlock Text="{Binding StatsText}" Margin="10" FontFamily="Consolas"/>
-                </ScrollViewer>
-            </GroupBox>
+            <Border Grid.Column="1" Margin="14,0,0,0" Style="{StaticResource PanelBorderStyle}">
+                <DockPanel>
+                    <StackPanel DockPanel.Dock="Top" Margin="0,0,0,12">
+                        <TextBlock Text="Calculations"
+                                   FontSize="18"
+                                   FontWeight="SemiBold"/>
+                        <TextBlock Text="Current statistics from loaded XML data"
+                                   Foreground="{StaticResource MutedTextBrush}"
+                                   Margin="0,3,0,0"/>
+                    </StackPanel>
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <TextBlock Text="{Binding StatsText}"
+                                   FontFamily="Consolas"
+                                   Foreground="#223047"
+                                   Background="#F8FAFC"
+                                   Padding="12"
+                                   TextWrapping="Wrap"/>
+                    </ScrollViewer>
+                </DockPanel>
+            </Border>
         </Grid>
     </DockPanel>
 </Window>

@@ -2,34 +2,45 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="clr-namespace:StudentRegistrationSystem.ViewModels"
-        Title="Login" Height="220" Width="420"
+        Title="Login" Height="330" Width="460"
         WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
     <Window.DataContext>
         <vm:LoginViewModel/>
     </Window.DataContext>
 
-    <Grid Margin="12">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+    <Border Margin="18" Style="{StaticResource PanelBorderStyle}">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
 
-        <TextBlock Text="Sign in (demo: admin / admin)" FontWeight="SemiBold" FontSize="14"/>
+            <StackPanel Margin="0,0,0,14">
+                <TextBlock Text="Sign in"
+                           FontWeight="SemiBold"
+                           FontSize="24"/>
+                <TextBlock Text="Demo credentials: admin / admin"
+                           Foreground="{StaticResource MutedTextBrush}"
+                           Margin="0,4,0,0"/>
+            </StackPanel>
 
-        <StackPanel Grid.Row="1" Orientation="Horizontal" VerticalAlignment="Center">
-            <TextBlock Text="Login:" VerticalAlignment="Center" Width="100"/>
-            <TextBox Text="{Binding Login, UpdateSourceTrigger=PropertyChanged}"/>
-        </StackPanel>
+            <StackPanel Grid.Row="1" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,4">
+                <TextBlock Text="Login" VerticalAlignment="Center" Width="110" FontWeight="SemiBold"/>
+                <TextBox Text="{Binding Login, UpdateSourceTrigger=PropertyChanged}"/>
+            </StackPanel>
 
-        <StackPanel Grid.Row="2" Orientation="Horizontal" VerticalAlignment="Center">
-            <TextBlock Text="Password:" VerticalAlignment="Center" Width="100"/>
-            <PasswordBox x:Name="Pwd" PasswordChanged="PasswordBox_OnPasswordChanged"/>
-        </StackPanel>
+            <StackPanel Grid.Row="2" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,4">
+                <TextBlock Text="Password" VerticalAlignment="Center" Width="110" FontWeight="SemiBold"/>
+                <PasswordBox x:Name="Pwd" PasswordChanged="PasswordBox_OnPasswordChanged"/>
+            </StackPanel>
 
-        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right">
-            <Button Content="Sign in" Command="{Binding TryLoginCommand}"/>
-        </StackPanel>
-    </Grid>
+            <Button Grid.Row="3"
+                    Content="Log in"
+                    Command="{Binding TryLoginCommand}"
+                    HorizontalAlignment="Stretch"
+                    Margin="114,22,4,0"/>
+        </Grid>
+    </Border>
 </Window>
