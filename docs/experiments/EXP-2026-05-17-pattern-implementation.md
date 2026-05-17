@@ -1,3 +1,4 @@
+# EXP-2026-05-17 Pure Function Experiment
 ## Goal
 
 Evaluate whether an AI assistant can implement the selected reset filters feature using a suitable design pattern without creating unnecessary complexity.
