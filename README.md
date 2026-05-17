@@ -21,3 +21,16 @@ Requirements coverage
 - Filtering: by name, group, study year, scholarship, department (>=3 filters).
 - Calculations: count students in group, average grade for course, total credits for student (>=2 calculations).
 - Unit test: xUnit test for `LoginService.Login()` (admin/admin).
+
+## AI Engineering Harness
+
+This project includes:
+
+- BDD requirements
+- Mermaid architecture diagrams
+- AI-assisted pure function experiment
+
+See:
+- docs/requirements
+- docs/architecture
+- experiments
