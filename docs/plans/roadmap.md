@@ -21,7 +21,7 @@
 * [ ] **Database Migration:** Swapping the local structural DataService layer for a secure SQL Server database instance.
 * [ ] **Advanced Role-Based Access Control:** Moving past demo credentials to dynamic database password hashing and account management tiers.
 
-* [ ] ## Reset Filters Command Pattern Module
+* [ ]  Reset Filters Command Pattern Module
 
 Status: Complete
 
