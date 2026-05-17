@@ -175,17 +175,26 @@ public sealed class MainViewModel : ViewModelBase
 
     private void ClearStudentFilters()
     {
-        StudentNameFilter = "";
-        GroupFilter = "";
-        StudyYearFilter = null;
-        OnlyScholarship = false;
+        var resetState = FilterResetService.ResetStudentFilters(new StudentFilterState(
+            StudentNameFilter,
+            GroupFilter,
+            StudyYearFilter,
+            OnlyScholarship));
+
+        StudentNameFilter = resetState.StudentNameFilter;
+        GroupFilter = resetState.GroupFilter;
+        StudyYearFilter = resetState.StudyYearFilter;
+        OnlyScholarship = resetState.OnlyScholarship;
+
         StudentsView.Refresh();
         UpdateStats();
     }
 
     private void ClearCourseFilters()
     {
-        CourseDepartmentFilter = "";
+        var resetState = FilterResetService.ResetCourseFilters(new CourseFilterState(CourseDepartmentFilter));
+        CourseDepartmentFilter = resetState.CourseDepartmentFilter;
+
         CoursesView.Refresh();
     }
 
