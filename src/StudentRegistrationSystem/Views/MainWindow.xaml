@@ -65,7 +65,7 @@
                 <Button Content="Show all students"
                         ToolTip="Reset all student filters and display every student"
                         AutomationProperties.Name="Show all students"
-                        <!-- Command Pattern binding: invokes Task 4 student filter reset command -->
+         
                         Command="{Binding ClearStudentFiltersCommand}"
                         Style="{StaticResource SecondaryButtonStyle}"
                         Margin="14,4,4,4"/>
@@ -119,7 +119,7 @@
                             <Button Content="Show all courses"
                                     ToolTip="Reset course filters and display every course"
                                     AutomationProperties.Name="Show all courses"
-                                    <!-- Command Pattern binding: invokes Task 4 course filter reset command -->
+                                    
                                     Command="{Binding ClearCourseFiltersCommand}"
                                     Style="{StaticResource SecondaryButtonStyle}"/>
                         </StackPanel>
